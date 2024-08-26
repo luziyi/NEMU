@@ -387,6 +387,14 @@ uint32_t eval(int p, int q)
         {
             assert(0);
         }
+        else if (op == -1)
+        {
+        }
+        else if (tokens[p].type == NEG)
+        {
+            sscanf(tokens[q].str, "%d", &result);
+            return -result;
+        }
         else if (tokens[p].type == '!')
         {
             sscanf(tokens[q].str, "%d", &result);

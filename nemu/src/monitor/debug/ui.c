@@ -82,34 +82,51 @@ static int cmd_info()
     return 0;
 }
 
-static int cmd_x(){
-	char *args[2];
-	args[0] = strtok(NULL, " ");
-	args[1] = strtok(NULL, " ");
-	int step=0;
-	swaddr_t address;
-	if(args[0]==NULL || args[1]==NULL){
-		printf("Invaild args\nUsage: x [N] [EXPR]\n");
-		return 0;
-	}
-	sscanf(args[0], "%d", &step);
-	sscanf(args[1], "%x", &address);
+static int cmd_x()
+{
+    char *args[2];
+    args[0] = strtok(NULL, " ");
+    args[1] = strtok(NULL, " ");
+    int step = 0;
+    swaddr_t address;
+    if (args[0] == NULL || args[1] == NULL)
+    {
+        printf("Invaild args\nUsage: x [N] [EXPR]\n");
+        return 0;
+    }
+    sscanf(args[0], "%d", &step);
+    sscanf(args[1], "%x", &address);
 
-	int j=0;
-	for(int i=0;i<step;i++){
-		if(j%4==0){
-			printf("0x%x: ", address);
-		}
-		printf("0x%08x ", swaddr_read(address, 4));
+    int j = 0;
+    for (int i = 0; i < step; i++)
+    {
+        if (j % 4 == 0)
+        {
+            printf("0x%x: ", address);
+        }
+        printf("0x%08x ", swaddr_read(address, 4));
 
-		address+=4;
-		j++;
-		if(j%4==0){
-			printf("\n");
-		}
-	}
-	printf("\n");
-	return 0;
+        address += 4;
+        j++;
+        if (j % 4 == 0)
+        {
+            printf("\n");
+        }
+    }
+    printf("\n");
+    return 0;
+}
+
+static int cmd_p(char *args)
+{
+    bool *success = false;
+    int i;
+    i = expr(args, success);
+    if (!success)
+    {
+        printf("%d\n", i);
+    }
+    return 0;
 }
 static struct
 {
@@ -122,7 +139,8 @@ static struct
     {"q", "Exit NEMU", cmd_q},
     {"si", "One Step", cmd_si},
     {"info", "Print the information of program", cmd_info},
-	{"x", "Scan the memory", cmd_x}
+    {"x", "Scan the memory", cmd_x},
+    {"p", "Calculate the expression", cmd_p}
     /* TODO: Add more commands */
 
 };

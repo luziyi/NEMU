@@ -206,35 +206,21 @@ uint32_t expr(char *e, bool *success)
     return 0;
 }
 
-bool check_parentheses(int p, int q) // 用于判断表达式的左括号和右括号是否匹配
+bool check_parentheses(int p, int q)
 {
-    int a;
-    int j = 0, k = 0;
-    if (tokens[p].type == '(' || tokens[q].type == ')')
+    if (tokens[p].type == '(' && tokens[q].type == ')')
     {
-        for (a = p; a <= q; a++)
+        int balance = 0;
+        for (int i = p; i <= q; i++)
         {
-            if (tokens[a].type == '(')
-            {
-                j++;
-            }
-            if (tokens[a].type == ')')
-            {
-                k++;
-            }
-            if (a != q && j == k)
-            {
+            if (tokens[i].type == '(')
+                balance++;
+            if (tokens[i].type == ')')
+                balance--;
+            if (balance < 0)
                 return false;
-            }
         }
-        if (j == k)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return balance == 0;
     }
     return false;
 }
@@ -481,5 +467,5 @@ uint32_t eval(int p, int q)
         break;
     }
 
-    return 0;
+    return result;
 }

@@ -228,23 +228,28 @@ uint32_t expr(char *e, bool *success)
     return eval(0, nr_token - 1);
 }
 
-bool check_parentheses(int p, int q)
-{
-    if (tokens[p].type == '(' && tokens[q].type == ')')
-    {
-        int balance = 0;
-        for (int i = p; i <= q; i++)
-        {
-            if (tokens[i].type == '(')
-                balance++;
-            if (tokens[i].type == ')')
-                balance--;
-            if (balance < 0)
-                return false;
-        }
-        return balance == 0;
-    }
-    return false;
+bool check_parentheses(int p, int q){
+	int a;
+	int j = 0, k = 0;
+	if (tokens[p].type == '(' || tokens[q].type == ')'){
+		for (a = p; a <= q; a++){
+			if (tokens[a].type == '('){
+				j++;
+			}
+			if (tokens[a].type == ')'){
+				k++;
+			}
+			if (a != q && j == k){
+				return false;
+			}
+		}
+		if (j == k){
+				return true;
+			} else {
+				return false;
+			}
+	}
+	return false;
 }
 
 int dominant_operator(int p, int q) // 判断运算符的优先级

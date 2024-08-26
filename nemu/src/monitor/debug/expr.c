@@ -318,10 +318,15 @@ int dominant_operator(int p, int q) // 判断运算符的优先级
 
 uint32_t eval(int p, int q)
 {
+    printf("eval %d %d\n", p, q);
     int result = 0;
     int op;
     int val1, val2;
-    if (p == q)
+    if (p > q)
+    {
+        assert(0);
+    }
+    else if (p == q)
     {
         if (tokens[p].type == NUM)
         {

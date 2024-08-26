@@ -24,19 +24,14 @@ static struct rule
     char *regex;
     int token_type;
 } rules[] = {
-
-    /* TODO: Add more rules.
-     * Pay attention to the precedence level of different rules.
-     */
-
     {" +", NOTYPE}, // spaces
+    {"\\d+", NUM},  // decimal number
     {"\\|\\|", OR},
     {"&&", AND},
-    {"==", EQ}, // equal
-    {"!=", NOTEQ},
+    {"==", EQ},                 // equal
+    {"!=", NOTEQ},              // not equal
     {"\\$[a-z]+", REGISTER},    // register
     {"0[xX][0-9a-fA-F]+", HEX}, // hex number
-    {"[0-9]+", NUM},            // decimal number
     {"\\+", '+'},               // plus
     {"\\-", '-'},               // minus
     {"\\*", '*'},               // multiply

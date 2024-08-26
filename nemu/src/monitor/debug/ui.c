@@ -81,6 +81,32 @@ static int cmd_info()
     printf("Unknown command '%s'\n", arg);
     return 0;
 }
+
+static int cmd_x(){
+	char *args[2];
+	args[0] = strtok(NULL, " ");
+	args[1] = strtok(NULL, " ");
+	int step=0;
+	swaddr_t address;
+	sscanf(args[0], "%d", &step);
+	sscanf(args[1], "%x", &address);
+
+	int j=0;
+	for(int i=0;i<step;i++){
+		if(j%4==0){
+			printf("0x%x: ", address);
+		}
+		printf("0x%08x ", swaddr_read(address, 4));
+
+		address+=4;
+		j++;
+		if(j%4==0){
+			printf("\n");
+		}
+	}
+	printf("\n");
+	return 0;
+}
 static struct
 {
     char *name;
@@ -91,7 +117,8 @@ static struct
     {"c", "Continue the execution of the program", cmd_c},
     {"q", "Exit NEMU", cmd_q},
     {"si", "One Step", cmd_si},
-    {"info", "Print the information of program", cmd_info}
+    {"info", "Print the information of program", cmd_info},
+	{"x", "Scan the memory", cmd_x}
     /* TODO: Add more commands */
 
 };

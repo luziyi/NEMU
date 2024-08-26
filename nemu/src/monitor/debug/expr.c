@@ -25,7 +25,7 @@ static struct rule
     int token_type;
 } rules[] = {
     {" +", NOTYPE}, // spaces
-    {"\\d+", NUM},  // decimal number
+    {"[0-9]+", NUM},  // decimal number
     {"\\|\\|", OR},
     {"&&", AND},
     {"==", EQ},                 // equal

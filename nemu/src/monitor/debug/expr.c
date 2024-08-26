@@ -40,7 +40,7 @@ static struct rule
 
     {"\\$[a-z]+", REGISTER},
     {"0[xX][0-9a-fA-F]+", HEX},
-    {"[0-9]", NUM},
+    {"[0-9]+", NUM},
 
     {"==", EQ}, // equal
     {"!=", NOTEQ},
@@ -112,6 +112,7 @@ static bool make_token(char *e)
                  * to record the token in the array `tokens'. For certain types
                  * of tokens, some extra actions should be performed.
                  */
+
                 int j;
                 for (j = 0; j < 32; j++)
                 { //清空
@@ -188,6 +189,7 @@ static bool make_token(char *e)
                 default:
                     assert(0);
                 }
+
                 break;
             }
         }
@@ -202,8 +204,6 @@ static bool make_token(char *e)
     return true;
 }
 
-uint32_t eval(int p, int q);
-
 uint32_t expr(char *e, bool *success)
 {
     if (!make_token(e))
@@ -211,279 +211,8 @@ uint32_t expr(char *e, bool *success)
         *success = false;
         return 0;
     }
-    int i;
-    for (i = 0; i < nr_token; i++)
-    {
-        if (tokens[i].type == '*' &&
-            (i == 0 || (tokens[i - 1].type != NUM && tokens[i - 1].type != HEX && tokens[i - 1].type != ')')))
-        {
-            tokens[i].type = POINT;
-        }
-        if (tokens[i].type == '-' &&
-            (i == 0 || (tokens[i - 1].type != NUM && tokens[i - 1].type != HEX && tokens[i - 1].type != ')')))
-        {
-            tokens[i].type = NEG;
-        }
-    }
-    return eval(0, nr_token - 1);
-}
 
-bool check_parentheses(int p, int q){
-	int a;
-	int j = 0, k = 0;
-	if (tokens[p].type == '(' || tokens[q].type == ')'){
-		for (a = p; a <= q; a++){
-			if (tokens[a].type == '('){
-				j++;
-			}
-			if (tokens[a].type == ')'){
-				k++;
-			}
-			if (a != q && j == k){
-				return false;
-			}
-		}
-		if (j == k){
-				return true;
-			} else {
-				return false;
-			}
-	}
-	return false;
-}
-
-int dominant_operator(int p, int q){
-	int step = 0;
-	int i;
-	int op = -1;
-	int pri = 0;
-    
-	for (i = p; i <= q; i++){
-		if (tokens[i].type == '('){
-			step++;
-		}
-		if (tokens[i].type == ')'){
-			step--;
-		}
-	
-		if (step == 0){
-		if (tokens[i].type == OR){
-			if (pri < 51){
-				op = i;
-				pri = 51;
-			}
-		} else if (tokens[i].type == AND){
-			if (pri < 50){
-				op = i;
-				pri = 50;
-			}
-		} else if (tokens[i].type == EQ || tokens[i].type == NOTEQ){
-			if (pri < 49){
-				op = i;
-				pri = 49;
-			}
-		} else if (tokens[i].type == '+' || tokens[i].type == '-'){
-			if (pri < 48){
-				op = i;
-				pri = 48;
-			}
-		} else if (tokens[i].type == '*' || tokens[i].type == '/'){
-			if (pri < 46){
-				op = i;
-				pri = 46;
-			}
-		}
-		else if (step < 0){
-			return -2;
-		}
-	}
-	}
-	return op;
-}
-
-uint32_t eval(int p, int q)
-{
-    int result = 0;
-    int op;
-    int val1, val2;
-    if (p > q)
-    {
-        assert(0);
-    }
-    else if (p == q)
-    {
-        if (tokens[p].type == NUM)
-        {
-            sscanf(tokens[p].str, "%d", &result);
-            return result;
-        }
-        else if (tokens[p].type == HEX)
-        {
-            int i = 2;
-            while (tokens[p].str[i] != 0)
-            {
-                result *= 16;
-                result += tokens[p].str[i] < 58 ? tokens[p].str[i] - '0' : tokens[p].str[i] - 'a' + 10;
-                i++;
-            }
-        }
-        else if (tokens[p].type == REGISTER)
-        {
-            if (!strcmp(tokens[p].str, "$eax"))
-            {
-                return cpu.eax;
-            }
-            else if (!strcmp(tokens[p].str, "$ecx"))
-            {
-                return cpu.ecx;
-            }
-            else if (!strcmp(tokens[p].str, "$edx"))
-            {
-                return cpu.edx;
-            }
-            else if (!strcmp(tokens[p].str, "$ebx"))
-            {
-                return cpu.ebx;
-            }
-            else if (!strcmp(tokens[p].str, "$esp"))
-            {
-                return cpu.esp;
-            }
-            else if (!strcmp(tokens[p].str, "$ebp"))
-            {
-                return cpu.ebp;
-            }
-            else if (!strcmp(tokens[p].str, "$esi"))
-            {
-                return cpu.esi;
-            }
-            else if (!strcmp(tokens[p].str, "$edi"))
-            {
-                return cpu.edi;
-            }
-            else if (!strcmp(tokens[p].str, "$eip"))
-            {
-                return cpu.eip;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        else
-        {
-            assert(0);
-        }
-    }
-    else if (check_parentheses(p, q) == true)
-    {
-        printf("Parentheses match: %d to %d\n", p, q);
-        return eval(p + 1, q - 1);
-    }
-    else
-    {
-        op = dominant_operator(p, q);
-        printf("dominant_operator(%d, %d) = %d\n", p, q, op);
-        if (op == -2)
-        {
-            assert(0);
-        }
-        else if (tokens[p].type == '!')
-        {
-            sscanf(tokens[q].str, "%d", &result);
-            return !result;
-        }
-        else if (tokens[p].type == REGISTER)
-        {
-            if (!strcmp(tokens[p].str, "$eax"))
-            {
-                result = cpu.eax;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ecx"))
-            {
-                result = cpu.ecx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$edx"))
-            {
-                result = cpu.edx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ebx"))
-            {
-                result = cpu.ebx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$esp"))
-            {
-                result = cpu.esp;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ebp"))
-            {
-                result = cpu.ebp;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$esi"))
-            {
-                result = cpu.esi;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$edi"))
-            {
-                result = cpu.edi;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$eip"))
-            {
-                result = cpu.eip;
-                return result;
-            }
-            else
-            {
-                assert(0);
-                return 0;
-            }
-        }
-        val1 = eval(p, op - 1);
-        val2 = eval(op + 1, q);
-        printf("eval(%d, %d): val1 = %d, val2 = %d, op = %d\n", p, q, val1, val2, tokens[op].type);
-        switch (tokens[op].type)
-        {
-        case '+':
-            return val1 + val2;
-        case '-':
-            return val1 - val2;
-        case '*':
-            return val1 * val2;
-        case '/':
-            return val1 / val2;
-        case OR:
-            return val1 || val2;
-        case AND:
-            return val1 && val2;
-        case EQ:
-            if (val1 == val2)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
-        case NOTEQ:
-            if (val1 != val2)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
-        default:
-            assert(0);
-        }
-    }
+    /* TODO: Insert codes to evaluate the expression. */
+    panic("please implement me");
     return 0;
 }

@@ -252,73 +252,53 @@ bool check_parentheses(int p, int q){
 	return false;
 }
 
-int dominant_operator(int p, int q) // 判断运算符的优先级
-{
-    int step = 0;
-    int i;
-    int op = -1;
-    int pri = 0;
-
-    for (i = p; i <= q; i++)
-    {
-        if (tokens[i].type == '(')
-        {
-            step++;
-        }
-        if (tokens[i].type == ')')
-        {
-            step--;
-        }
-
-        if (step == 0)
-        {
-            if (tokens[i].type == OR)
-            {
-                if (pri < 51)
-                {
-                    op = i;
-                    pri = 51;
-                }
-            }
-            else if (tokens[i].type == AND)
-            {
-                if (pri < 50)
-                {
-                    op = i;
-                    pri = 50;
-                }
-            }
-            else if (tokens[i].type == EQ || tokens[i].type == NOTEQ)
-            {
-                if (pri < 49)
-                {
-                    op = i;
-                    pri = 49;
-                }
-            }
-            else if (tokens[i].type == '+' || tokens[i].type == '-')
-            {
-                if (pri < 48)
-                {
-                    op = i;
-                    pri = 48;
-                }
-            }
-            else if (tokens[i].type == '*' || tokens[i].type == '/')
-            {
-                if (pri < 46)
-                {
-                    op = i;
-                    pri = 46;
-                }
-            }
-            else if (step < 0)
-            {
-                return -2;
-            }
-        }
-    }
-    return op;
+int dominant_operator(int p, int q){
+	int step = 0;
+	int i;
+	int op = -1;
+	int pri = 0;
+    
+	for (i = p; i <= q; i++){
+		if (tokens[i].type == '('){
+			step++;
+		}
+		if (tokens[i].type == ')'){
+			step--;
+		}
+	
+		if (step == 0){
+		if (tokens[i].type == OR){
+			if (pri < 51){
+				op = i;
+				pri = 51;
+			}
+		} else if (tokens[i].type == AND){
+			if (pri < 50){
+				op = i;
+				pri = 50;
+			}
+		} else if (tokens[i].type == EQ || tokens[i].type == NOTEQ){
+			if (pri < 49){
+				op = i;
+				pri = 49;
+			}
+		} else if (tokens[i].type == '+' || tokens[i].type == '-'){
+			if (pri < 48){
+				op = i;
+				pri = 48;
+			}
+		} else if (tokens[i].type == '*' || tokens[i].type == '/'){
+			if (pri < 46){
+				op = i;
+				pri = 46;
+			}
+		}
+		else if (step < 0){
+			return -2;
+		}
+	}
+	}
+	return op;
 }
 
 uint32_t eval(int p, int q)

@@ -321,11 +321,7 @@ uint32_t eval(int p, int q)
     int result = 0;
     int op;
     int val1, val2;
-    if (p > q)
-    {
-        assert(0);
-    }
-    else if (p == q)
+    if (p == q)
     {
         if (tokens[p].type == NUM)
         {

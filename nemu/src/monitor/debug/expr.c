@@ -187,10 +187,9 @@ int dominant_operator(int p, int q)
     {
         printf("No dominant operator found between positions %d and %d\n", p, q);
     }
-    
+
     return op;
 }
-
 
 static bool make_token(char *e)
 {
@@ -448,11 +447,11 @@ uint32_t eval(int p, int q)
                     return result;
                 }
             }
-        }
-        else if (tokens[p].type == NEG)
-        {
-            sscanf(tokens[q].str, "%d", &result);
-            return -result;
+            else if (tokens[p].type == NEG)
+            {
+                sscanf(tokens[q].str, "%d", &result);
+                return -result;
+            }
         }
         else if (tokens[p].type == '!')
         {

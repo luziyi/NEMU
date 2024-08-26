@@ -209,37 +209,37 @@ static bool make_token(char *e)
                 case 256:
                     break;
                 case 1:
-                    tokens[nr_token].type = 1;
+                    tokens[nr_token].type = NUM;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 2:
-                    tokens[nr_token].type = 2;
+                    tokens[nr_token].type = REGISTER;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 3:
-                    tokens[nr_token].type = 3;
+                    tokens[nr_token].type = HEX;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 4:
-                    tokens[nr_token].type = 4;
+                    tokens[nr_token].type = EQ;
                     strcpy(tokens[nr_token].str, "==");
                     nr_token++;
                     break;
                 case 5:
-                    tokens[nr_token].type = 5;
+                    tokens[nr_token].type = NOTEQ;
                     strcpy(tokens[nr_token].str, "!=");
                     nr_token++;
                     break;
                 case 6:
-                    tokens[nr_token].type = 6;
+                    tokens[nr_token].type = OR;
                     strcpy(tokens[nr_token].str, "||");
                     nr_token++;
                     break;
                 case 7:
-                    tokens[nr_token].type = 7;
+                    tokens[nr_token].type = AND;
                     strcpy(tokens[nr_token].str, "&&");
                     nr_token++;
                     break;
@@ -291,7 +291,7 @@ static bool make_token(char *e)
 
 uint32_t eval(int p, int q)
 {
-    printf("p = %d, q = %d\n", p, q);
+    // printf("p = %d, q = %d\n", p, q);
     int result = 0;
     int op;
     int val1, val2;
@@ -370,9 +370,9 @@ uint32_t eval(int p, int q)
     }
     else
     {
-        printf("\tp = %d, q = %d\n", p, q);
+        // printf("\tp = %d, q = %d\n", p, q);
         op = dominant_operator(p, q);
-        printf("op = %d\n", op);
+        // printf("op = %d\n", op);
         if (op == -2)
         {
             assert(0);

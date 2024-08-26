@@ -237,7 +237,7 @@ bool check_parentheses(int p, int q) // 用于判断表达式的左括号和右�
     return false;
 }
 
-int dominant_operator(int p, int q)  // 判断运算符的优先级
+int dominant_operator(int p, int q) // 判断运算符的优先级
 {
     int step = 0;
     int i;
@@ -304,4 +304,179 @@ int dominant_operator(int p, int q)  // 判断运算符的优先级
         }
     }
     return op;
+}
+
+uint32_t eval(int p, int q)
+{
+    int result = 0;
+    int op;
+    int val1, val2;
+    if (p > q)
+    {
+        assert(0);
+    }
+    else if (p == q)
+    {
+        if (tokens[p].type == NUM)
+        {
+            sscanf(tokens[p].str, "%d", &result);
+            return result;
+        }
+        else if (tokens[p].type == HEX)
+        {
+            int i = 2;
+            while (tokens[p].str[i] != 0)
+            {
+                result *= 16;
+                result += tokens[p].str[i] < 58 ? tokens[p].str[i] - '0' : tokens[p].str[i] - 'a' + 10;
+                i++;
+            }
+        }
+        else if (tokens[p].type == REGISTER)
+        {
+            if (!strcmp(tokens[p].str, "$eax"))
+            {
+                return cpu.eax;
+            }
+            else if (!strcmp(tokens[p].str, "ecx"))
+            {
+                return cpu.ecx;
+            }
+            else if (!strcmp(tokens[p].str, "$ebx"))
+            {
+                return cpu.ebx;
+            }
+            else if (!strcmp(tokens[p].str, "$esp"))
+            {
+                return cpu.esp;
+            }
+            else if (!strcmp(tokens[p].str, "$ebp"))
+            {
+                return cpu.ebp;
+            }
+            else if (!strcmp(tokens[p].str, "$esi"))
+            {
+                return cpu.esi;
+            }
+            else if (!strcmp(tokens[p].str, "$edi"))
+            {
+                return cpu.edi;
+            }
+            else if (!strcmp(tokens[p].str, "$eip"))
+            {
+                return cpu.eip;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            assert(0);
+        }
+    }
+    else if (check_parentheses(p, q) == true)
+    {
+        return eval(p + 1, q - 1);
+    }
+    else
+    {
+        op = dominant_operator(p, q);
+        if (op == -2)
+        {
+            assert(0);
+        }
+        else if (tokens[p].type == '!')
+        {
+            sscanf(tokens[q].str, "%d", &result);
+            return !result;
+        }
+        else if (tokens[p].type == REGISTER)
+        {
+            if (!strcmp(tokens[p].str, "$eax"))
+            {
+                result = cpu.eax;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$ecx"))
+            {
+                result = cpu.ecx;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$edx"))
+            {
+                result = cpu.edx;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$ebx"))
+            {
+                result = cpu.ebx;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$esp"))
+            {
+                result = cpu.esp;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$ebp"))
+            {
+                result = cpu.ebp;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$esi"))
+            {
+                result = cpu.esi;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$edi"))
+            {
+                result = cpu.edi;
+                return result;
+            }
+            else if (!strcmp(tokens[p].str, "$eip"))
+            {
+                result = cpu.eip;
+                return result;
+            }
+            else
+            {
+                assert(0);
+            }
+        }
+
+        val1 = eval(p, op - 1);
+        val2 = eval(op + 1, q);
+        switch (tokens[op].type)
+        {
+        case '+':
+            result = val1 + val2;
+            break;
+        case '-':
+            result = val1 - val2;
+            break;
+        case '*':
+            result = val1 * val2;
+            break;
+        case '/':
+            result = val1 / val2;
+            break;
+        case EQ:
+            result = val1 == val2;
+            break;
+        case NOTEQ:
+            result = val1 != val2;
+            break;
+        case OR:
+            result = val1 || val2;
+            break;
+        case AND:
+            result = val1 && val2;
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
+    return 0;
 }

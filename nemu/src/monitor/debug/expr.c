@@ -30,25 +30,20 @@ static struct rule
      */
 
     {" +", NOTYPE}, // spaces
-
-    {"\\+", '+'}, // plus
-    {"\\-", '-'},
-    {"\\*", '*'},
-    {"\\/", '/'},
-
-    {"\\$[a-z]+", REGISTER},
-    {"0[xX][0-9a-fA-F]+", HEX},
-    {"[0-9]+", NUM},
-
-    {"==", EQ}, // equal
-    {"!=", NOTEQ},
-
-    {"\\(", '('},
-    {"\\)", ')'},
-
     {"\\|\\|", OR},
     {"&&", AND},
-    {"!", '!'},
+    {"==", EQ}, // equal
+    {"!=", NOTEQ},
+    {"\\$[a-z]+", REGISTER},    // register
+    {"0[xX][0-9a-fA-F]+", HEX}, // hex number
+    {"[0-9]+", NUM},            // decimal number
+    {"\\+", '+'},               // plus
+    {"\\-", '-'},               // minus
+    {"\\*", '*'},               // multiply
+    {"\\/", '/'},               // divide
+    {"\\(", '('},               // left parenthesis
+    {"\\)", ')'},               // right parenthesis
+    {"!", '!'}                  // logical not
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))

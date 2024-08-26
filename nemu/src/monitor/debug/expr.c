@@ -179,14 +179,18 @@ int dominant_operator(int p, int q)
                     pri = 46;
                 }
             }
-            else if (step < 0)
-            {
-                return -2;
-            }
         }
     }
+
+    // Add debugging output to trace operator determination
+    if (op == -1)
+    {
+        printf("No dominant operator found between positions %d and %d\n", p, q);
+    }
+    
     return op;
 }
+
 
 static bool make_token(char *e)
 {

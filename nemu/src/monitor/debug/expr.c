@@ -308,6 +308,7 @@ static bool make_token(char *e)
 
 uint32_t eval(int p, int q)
 {
+    printf("p = %d, q = %d\n", p, q);
     int result = 0;
     int op;
     int val1, val2;

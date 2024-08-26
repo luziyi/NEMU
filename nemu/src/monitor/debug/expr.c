@@ -387,6 +387,7 @@ uint32_t eval(int p, int q)
     }
     else
     {
+        printf("\tp = %d, q = %d\n", p, q);
         op = dominant_operator(p, q);
         printf("op = %d\n", op);
         if (op == -2)

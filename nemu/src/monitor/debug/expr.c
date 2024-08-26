@@ -397,11 +397,13 @@ uint32_t eval(int p, int q)
     }
     else if (check_parentheses(p, q) == true)
     {
+        printf("Parentheses match: %d to %d\n", p, q);
         return eval(p + 1, q - 1);
     }
     else
     {
         op = dominant_operator(p, q);
+        printf("dominant_operator(%d, %d) = %d\n", p, q, op);
         if (op == -2)
         {
             assert(0);
@@ -466,7 +468,7 @@ uint32_t eval(int p, int q)
         }
         val1 = eval(p, op - 1);
         val2 = eval(op + 1, q);
-
+        printf("eval(%d, %d): val1 = %d, val2 = %d, op = %d\n", p, q, val1, val2, tokens[op].type);
         switch (tokens[op].type)
         {
         case '+':

@@ -29,21 +29,26 @@ static struct rule
      * Pay attention to the precedence level of different rules.
      */
 
-    {" +", NOTYPE},             // spaces
-    {"\\+", '+'},               // plus
-    {"\\-", '-'},               // minus
-    {"\\*", '*'},               // multiply
-    {"/", '/'},                 // divide
-    {"\\(", '('},               // left bracket
-    {"\\)", ')'},               // right bracket
-    {"0[xX][0-9a-fA-F]+", HEX}, // hex
-    {"[0-9]+", NUM},            // number
-    {"\\$[a-zA-Z]+", REGISTER}, // register
-    {"\\|\\|", OR},             // or
-    {"&&", AND},                // and
-    {"==", EQ},                 // equal
-    {"!=", NOTEQ},              // not equal
+    {" +", NOTYPE}, // spaces
 
+    {"\\+", '+'}, // plus
+    {"\\-", '-'},
+    {"\\*", '*'},
+    {"\\/", '/'},
+
+    {"\\$[a-z]+", REGISTER},
+    {"0[xX][0-9a-fA-F]+", HEX},
+    {"[0-9]+", NUM},
+
+    {"==", EQ}, // equal
+    {"!=", NOTEQ},
+
+    {"\\(", '('},
+    {"\\)", ')'},
+
+    {"\\|\\|", OR},
+    {"&&", AND},
+    {"!", '!'},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))

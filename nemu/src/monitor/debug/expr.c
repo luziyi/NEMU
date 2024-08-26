@@ -388,6 +388,7 @@ uint32_t eval(int p, int q)
     else
     {
         op = dominant_operator(p, q);
+        printf("op = %d\n", op);
         if (op == -2)
         {
             assert(0);

@@ -88,6 +88,10 @@ static int cmd_x(){
 	args[1] = strtok(NULL, " ");
 	int step=0;
 	swaddr_t address;
+	if(args[0]==NULL || args[1]==NULL){
+		printf("Invalid arguments\n");
+		return 0;
+	}
 	sscanf(args[0], "%d", &step);
 	sscanf(args[1], "%x", &address);
 

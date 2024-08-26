@@ -445,6 +445,7 @@ uint32_t eval(int p, int q)
                 return 0;
             }
         }
+
         val1 = eval(p, op - 1);
         val2 = eval(op + 1, q);
 

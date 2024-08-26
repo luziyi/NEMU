@@ -326,9 +326,13 @@ uint32_t eval(int p, int q)
             {
                 return cpu.eax;
             }
-            else if (!strcmp(tokens[p].str, "ecx"))
+            else if (!strcmp(tokens[p].str, "$ecx"))
             {
                 return cpu.ecx;
+            }
+            else if (!strcmp(tokens[p].str, "$edx"))
+            {
+                return cpu.edx;
             }
             else if (!strcmp(tokens[p].str, "$ebx"))
             {
@@ -430,42 +434,47 @@ uint32_t eval(int p, int q)
             else
             {
                 assert(0);
+                return 0;
             }
         }
-    }
-    op = dominant_operator(p, q);
-    val1 = eval(p, op - 1);
-    val2 = eval(op + 1, q);
-    switch (tokens[op].type)
-    {
-    case '+':
-        result = val1 + val2;
-        break;
-    case '-':
-        result = val1 - val2;
-        break;
-    case '*':
-        result = val1 * val2;
-        break;
-    case '/':
-        result = val1 / val2;
-        break;
-    case EQ:
-        result = val1 == val2;
-        break;
-    case NOTEQ:
-        result = val1 != val2;
-        break;
-    case OR:
-        result = val1 || val2;
-        break;
-    case AND:
-        result = val1 && val2;
-        break;
-    default:
-        assert(0);
-        break;
-    }
+        val1 = eval(p, op - 1);
+        val2 = eval(op + 1, q);
 
-    return result;
+        switch (tokens[op].type)
+        {
+        case '+':
+            return val1 + val2;
+        case '-':
+            return val1 - val2;
+        case '*':
+            return val1 * val2;
+        case '/':
+            return val1 / val2;
+        case OR:
+            return val1 || val2;
+        case AND:
+            return val1 && val2;
+        case EQ:
+            if (val1 == val2)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        case NOTEQ:
+            if (val1 != val2)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        default:
+            assert(0);
+        }
+    }
+    return 0;
 }

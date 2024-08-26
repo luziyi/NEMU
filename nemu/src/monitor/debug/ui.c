@@ -72,7 +72,8 @@ static int cmd_info()
     {
         for (int i = 0; i < 8; i++)
         {
-            printf("%s: 0x%x\n", regsl[i], cpu.gpr[i]._32);
+            printf("%s\t\t", regsl[i]);
+            printf("0x%08x\t\t%d\n", cpu.gpr[i]._32, cpu.gpr[i]._32);
         }
         printf("eip: 0x%x\n", cpu.eip);
         return 0;

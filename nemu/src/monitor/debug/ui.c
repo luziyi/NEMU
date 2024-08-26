@@ -89,7 +89,7 @@ static int cmd_x(){
 	int step=0;
 	swaddr_t address;
 	if(args[0]==NULL || args[1]==NULL){
-		printf("Invalid arguments\n");
+		printf("Usage: x [N] [EXPR]\n");
 		return 0;
 	}
 	sscanf(args[0], "%d", &step);

@@ -15,7 +15,9 @@ enum
     EQ = 4,
     NOTEQ = 5,
     OR = 6,
-    AND = 7
+    AND = 7,
+    POINT,
+    NEG
     /* TODO: Add more token types */
 };
 
@@ -24,21 +26,31 @@ static struct rule
     char *regex;
     int token_type;
 } rules[] = {
+
+    /* TODO: Add more rules.
+     * Pay attention to the precedence level of different rules.
+     */
+
     {" +", NOTYPE}, // spaces
-    {"[0-9]+", NUM},  // decimal number
+
+    {"\\+", '+'}, // plus
+    {"\\-", '-'},
+    {"\\*", '*'},
+    {"\\/", '/'},
+
+    {"\\$[a-z]+", REGISTER},
+    {"0[xX][0-9a-fA-F]+", HEX},
+    {"[0-9]+", NUM},
+
+    {"==", EQ}, // equal
+    {"!=", NOTEQ},
+
+    {"\\(", '('},
+    {"\\)", ')'},
+
     {"\\|\\|", OR},
     {"&&", AND},
-    {"==", EQ},                 // equal
-    {"!=", NOTEQ},              // not equal
-    {"\\$[a-z]+", REGISTER},    // register
-    {"0[xX][0-9a-fA-F]+", HEX}, // hex number
-    {"\\+", '+'},               // plus
-    {"\\-", '-'},               // minus
-    {"\\*", '*'},               // multiply
-    {"\\/", '/'},               // divide
-    {"\\(", '('},               // left parenthesis
-    {"\\)", ')'},               // right parenthesis
-    {"!", '!'}                  // logical not
+    {"!", '!'},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
@@ -105,6 +117,7 @@ static bool make_token(char *e)
                 { //清空
                     tokens[nr_token].str[j] = '\0';
                 }
+
                 switch (rules[i].token_type)
                 {
                 case 256:

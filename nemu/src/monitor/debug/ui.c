@@ -119,7 +119,7 @@ static int cmd_x()
 
 static int cmd_p(char *args)
 {
-    bool *success = false;
+    bool *success = (bool *)malloc(sizeof(bool));
     int i;
     i = expr(args, success);
     if (!success)

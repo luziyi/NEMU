@@ -110,7 +110,11 @@ static bool make_token(char *e)
                  * to record the token in the array `tokens'. For certain types
                  * of tokens, some extra actions should be performed.
                  */
-
+                int j;
+                for (j = 0; j < 32; j++)
+                { //清空
+                    tokens[nr_token].str[j] = '\0';
+                }
                 switch (rules[i].token_type)
                 {
                 case 256:

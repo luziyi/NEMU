@@ -65,6 +65,21 @@ static int cmd_si()
     }
     return 0;
 }
+static int cmd_info()
+{
+    char *arg = strtok(NULL, " ");
+    if (strcmp(arg, "r") == 0)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            printf("%s: 0x%x\n", regsl[i], cpu.gpr[i]._32);
+        }
+        printf("eip: 0x%x\n", cpu.eip);
+        return 0;
+    }
+    printf("Unknown command '%s'\n", arg);
+    return 0;
+}
 static struct
 {
     char *name;
@@ -74,8 +89,8 @@ static struct
     {"help", "Display informations about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
     {"q", "Exit NEMU", cmd_q},
-    {"si", "One Step", cmd_si}
-
+    {"si", "One Step", cmd_si},
+    {"info", "Print the information of program", cmd_info}
     /* TODO: Add more commands */
 
 };

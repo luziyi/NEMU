@@ -16,9 +16,8 @@ enum
     NOTEQ = 5,
     OR = 6,
     AND = 7,
-    POINT,
-    NEG
-    /* TODO: Add more token types */
+    POINT = 8,
+    NEG = 9
 };
 
 static struct rule
@@ -38,19 +37,19 @@ static struct rule
     {"\\*", '*'},
     {"\\/", '/'},
 
-    {"\\$[a-z]+", REGISTER},
+    {"\\$[a-z][A-Z]+", REGISTER},
     {"0[xX][0-9a-fA-F]+", HEX},
     {"[0-9]+", NUM},
 
     {"==", EQ}, // equal
-    {"!=", NOTEQ},
-
-    {"\\(", '('},
-    {"\\)", ')'},
-
+    {"!=", NOTEQ}, // not equal
     {"\\|\\|", OR},
     {"&&", AND},
     {"!", '!'},
+
+    {"\\(", '('},
+    {"\\)", ')'}
+
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
@@ -86,38 +85,19 @@ typedef struct token
 Token tokens[32];
 int nr_token;
 
-bool check_parentheses(int p, int q)
-{
-    int a;
-    int j = 0, k = 0;
-    if (tokens[p].type == '(' || tokens[q].type == ')')
-    {
-        for (a = p; a <= q; a++)
-        {
-            if (tokens[a].type == '(')
-            {
-                j++;
-            }
-            if (tokens[a].type == ')')
-            {
-                k++;
-            }
-            if (a != q && j == k)
-            {
-                return false;
-            }
+bool check_parentheses(int p, int q) {
+    if (tokens[p].type == '(' && tokens[q].type == ')') {
+        int balance = 0;
+        for (int i = p; i <= q; i++) {
+            if (tokens[i].type == '(') balance++;
+            if (tokens[i].type == ')') balance--;
+            if (balance < 0) return false;
         }
-        if (j == k)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return balance == 0;
     }
     return false;
 }
+
 
 int dominant_operator(int p, int q)
 {

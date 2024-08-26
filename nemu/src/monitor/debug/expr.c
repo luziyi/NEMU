@@ -120,41 +120,40 @@ static bool make_token(char *e)
                 case 256:
                     break;
                 case 1:
-                    tokens[nr_token].type = NUM;
+                    tokens[nr_token].type = 1;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 2:
-                    tokens[nr_token].type = REGISTER;
+                    tokens[nr_token].type = 2;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 3:
-                    tokens[nr_token].type = HEX;
+                    tokens[nr_token].type = 3;
                     strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
                     nr_token++;
                     break;
                 case 4:
-                    tokens[nr_token].type = EQ;
+                    tokens[nr_token].type = 4;
                     strcpy(tokens[nr_token].str, "==");
                     nr_token++;
                     break;
                 case 5:
-                    tokens[nr_token].type = NOTEQ;
+                    tokens[nr_token].type = 5;
                     strcpy(tokens[nr_token].str, "!=");
                     nr_token++;
                     break;
                 case 6:
-                    tokens[nr_token].type = OR;
+                    tokens[nr_token].type = 6;
                     strcpy(tokens[nr_token].str, "||");
                     nr_token++;
                     break;
                 case 7:
-                    tokens[nr_token].type = AND;
+                    tokens[nr_token].type = 7;
                     strcpy(tokens[nr_token].str, "&&");
                     nr_token++;
                     break;
-
                 case '+':
                     tokens[nr_token].type = '+';
                     nr_token++;
@@ -185,7 +184,6 @@ static bool make_token(char *e)
                     break;
                 default:
                     assert(0);
-                    break;
                 }
             }
         }

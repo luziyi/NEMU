@@ -3,106 +3,203 @@
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
-#include <sys/types.h>
 #include <regex.h>
+#include <sys/types.h>
 
-enum {
-	NOTYPE = 256, EQ
-
-	/* TODO: Add more token types */
-
+enum
+{
+    NOTYPE = 256,
+    NUM = 1,
+    REGISTER = 2,
+    HEX = 3,
+    EQ = 4,
+    NOTEQ = 5,
+    OR = 6,
+    AND = 7
+    /* TODO: Add more token types */
 };
 
-static struct rule {
-	char *regex;
-	int token_type;
+static struct rule
+{
+    char *regex;
+    int token_type;
 } rules[] = {
 
-	/* TODO: Add more rules.
-	 * Pay attention to the precedence level of different rules.
-	 */
+    /* TODO: Add more rules.
+     * Pay attention to the precedence level of different rules.
+     */
 
-	{" +",	NOTYPE},				// spaces
-	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+    {" +", NOTYPE},             // spaces
+    {"\\+", '+'},               // plus
+    {"\\-", '-'},               // minus
+    {"\\*", '*'},               // multiply
+    {"/", '/'},                 // divide
+    {"\\(", '('},               // left bracket
+    {"\\)", ')'},               // right bracket
+    {"0[xX][0-9a-fA-F]+", HEX}, // hex
+    {"[0-9]+", NUM},            // number
+    {"\\$[a-zA-Z]+", REGISTER}, // register
+    {"\\|\\|", OR},             // or
+    {"&&", AND},                // and
+    {"==", EQ},                 // equal
+    {"!=", NOTEQ},              // not equal
+
 };
 
-#define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
+#define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
 
 static regex_t re[NR_REGEX];
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
  */
-void init_regex() {
-	int i;
-	char error_msg[128];
-	int ret;
+void init_regex()
+{
+    int i;
+    char error_msg[128];
+    int ret;
 
-	for(i = 0; i < NR_REGEX; i ++) {
-		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
-		if(ret != 0) {
-			regerror(ret, &re[i], error_msg, 128);
-			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-		}
-	}
+    for (i = 0; i < NR_REGEX; i++)
+    {
+        ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+        if (ret != 0)
+        {
+            regerror(ret, &re[i], error_msg, 128);
+            Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+        }
+    }
 }
 
-typedef struct token {
-	int type;
-	char str[32];
+typedef struct token
+{
+    int type;
+    char str[32];
 } Token;
 
 Token tokens[32];
 int nr_token;
 
-static bool make_token(char *e) {
-	int position = 0;
-	int i;
-	regmatch_t pmatch;
-	
-	nr_token = 0;
+static bool make_token(char *e)
+{
+    int position = 0;
+    int i;
+    regmatch_t pmatch;
 
-	while(e[position] != '\0') {
-		/* Try all rules one by one. */
-		for(i = 0; i < NR_REGEX; i ++) {
-			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-				char *substr_start = e + position;
-				int substr_len = pmatch.rm_eo;
+    nr_token = 0;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
-				position += substr_len;
+    while (e[position] != '\0')
+    {
+        /* Try all rules one by one. */
+        for (i = 0; i < NR_REGEX; i++)
+        {
+            if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0)
+            {
+                char *substr_start = e + position;
+                int substr_len = pmatch.rm_eo;
 
-				/* TODO: Now a new token is recognized with rules[i]. Add codes
-				 * to record the token in the array `tokens'. For certain types
-				 * of tokens, some extra actions should be performed.
-				 */
+                Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position,
+                    substr_len, substr_len, substr_start);
+                position += substr_len;
 
-				switch(rules[i].token_type) {
-					default: panic("please implement me");
-				}
+                /* TODO: Now a new token is recognized with rules[i]. Add codes
+                 * to record the token in the array `tokens'. For certain types
+                 * of tokens, some extra actions should be performed.
+                 */
 
-				break;
-			}
-		}
+                switch (rules[i].token_type)
+                {
+                case 256:
+                    break;
+                case 1:
+                    tokens[nr_token].type = NUM;
+                    strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+                    nr_token++;
+                    break;
+                case 2:
+                    tokens[nr_token].type = REGISTER;
+                    strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+                    nr_token++;
+                    break;
+                case 3:
+                    tokens[nr_token].type = HEX;
+                    strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+                    nr_token++;
+                    break;
+                case 4:
+                    tokens[nr_token].type = EQ;
+                    strcpy(tokens[nr_token].str, "==");
+                    nr_token++;
+                    break;
+                case 5:
+                    tokens[nr_token].type = NOTEQ;
+                    strcpy(tokens[nr_token].str, "!=");
+                    nr_token++;
+                    break;
+                case 6:
+                    tokens[nr_token].type = OR;
+                    strcpy(tokens[nr_token].str, "||");
+                    nr_token++;
+                    break;
+                case 7:
+                    tokens[nr_token].type = AND;
+                    strcpy(tokens[nr_token].str, "&&");
+                    nr_token++;
+                    break;
 
-		if(i == NR_REGEX) {
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-			return false;
-		}
-	}
+                case '+':
+                    tokens[nr_token].type = '+';
+                    nr_token++;
+                    break;
+                case '-':
+                    tokens[nr_token].type = '-';
+                    nr_token++;
+                    break;
+                case '*':
+                    tokens[nr_token].type = '*';
+                    nr_token++;
+                    break;
+                case '/':
+                    tokens[nr_token].type = '/';
+                    nr_token++;
+                    break;
+                case '!':
+                    tokens[nr_token].type = '!';
+                    nr_token++;
+                    break;
+                case '(':
+                    tokens[nr_token].type = '(';
+                    nr_token++;
+                    break;
+                case ')':
+                    tokens[nr_token].type = ')';
+                    nr_token++;
+                    break;
+                default:
+                    assert(0);
+                    break;
+                }
+            }
+        }
 
-	return true; 
+        if (i == NR_REGEX)
+        {
+            printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+            return false;
+        }
+    }
+
+    return true;
 }
 
-uint32_t expr(char *e, bool *success) {
-	if(!make_token(e)) {
-		*success = false;
-		return 0;
-	}
+uint32_t expr(char *e, bool *success)
+{
+    if (!make_token(e))
+    {
+        *success = false;
+        return 0;
+    }
 
-	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
-	return 0;
+    /* TODO: Insert codes to evaluate the expression. */
+    panic("please implement me");
+    return 0;
 }
-

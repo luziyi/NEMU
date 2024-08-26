@@ -201,6 +201,8 @@ static bool make_token(char *e)
     return true;
 }
 
+uint32_t eval(int p, int q);
+
 uint32_t expr(char *e, bool *success)
 {
     if (!make_token(e))
@@ -208,10 +210,21 @@ uint32_t expr(char *e, bool *success)
         *success = false;
         return 0;
     }
-
-    /* TODO: Insert codes to evaluate the expression. */
-    panic("please implement me");
-    return 0;
+    int i;
+    for (i = 0; i < nr_token; i++)
+    {
+        if (tokens[i].type == '*' &&
+            (i == 0 || (tokens[i - 1].type != NUM && tokens[i - 1].type != HEX && tokens[i - 1].type != ')')))
+        {
+            tokens[i].type = POINT;
+        }
+        if (tokens[i].type == '-' &&
+            (i == 0 || (tokens[i - 1].type != NUM && tokens[i - 1].type != HEX && tokens[i - 1].type != ')')))
+        {
+            tokens[i].type = NEG;
+        }
+    }
+    return eval(0, nr_token - 1);
 }
 
 bool check_parentheses(int p, int q)

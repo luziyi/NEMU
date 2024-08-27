@@ -159,8 +159,8 @@ static int cmd_w(char *args){
     sscanf(args, "%s", expression);
     printf("args read: %s\n",expression);
     WP *wp = new_wp();
-    bool *success = false;
-    wp->result = expr(expression, success);
+    wp->result = expr(expression, false);
+    printf("result: %d\n", wp->result);
     strcpy(wp->expr, expression);
     printf("Wathc point has set");
     return 0;

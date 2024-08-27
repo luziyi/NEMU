@@ -41,7 +41,7 @@ static struct rule
     {"0[xX][0-9a-fA-F]+", HEX},
     {"[0-9]+", NUM},
 
-    {"==", EQ}, // equal
+    {"==", EQ},    // equal
     {"!=", NOTEQ}, // not equal
     {"\\|\\|", OR},
     {"&&", AND},
@@ -85,91 +85,96 @@ typedef struct token
 Token tokens[32];
 int nr_token;
 
-bool check_parentheses(int p, int q) {
-    if (tokens[p].type == '(' && tokens[q].type == ')') {
+bool check_parentheses(int p, int q)
+{
+    if (tokens[p].type == '(' && tokens[q].type == ')')
+    {
         int balance = 0;
-        for (int i = p; i <= q; i++) {
-            if (tokens[i].type == '(') balance++;
-            if (tokens[i].type == ')') balance--;
-            if (balance < 0) return false;
+        for (int i = p; i <= q; i++)
+        {
+            if (tokens[i].type == '(')
+                balance++;
+            if (tokens[i].type == ')')
+                balance--;
+            if (balance < 0)
+                return false;
         }
         return balance == 0;
     }
     return false;
 }
 
+int dominant_operator(int p, int q)
+{
+    int step = 0;
+    int i;
+    int op = -1;
+    int pri = 0;
 
-    int dominant_operator(int p, int q)
+    for (i = p; i <= q; i++)
     {
-        int step = 0;
-        int i;
-        int op = -1;
-        int pri = 0;
-
-        for (i = p; i <= q; i++)
+        if (tokens[i].type == '(')
         {
-            if (tokens[i].type == '(')
-            {
-                step++;
-            }
-            if (tokens[i].type == ')')
-            {
-                step--;
-            }
+            step++;
+        }
+        if (tokens[i].type == ')')
+        {
+            step--;
+        }
 
-            if (step == 0)
+        if (step == 0)
+        {
+            if (tokens[i].type == OR)
             {
-                if (tokens[i].type == OR)
+                if (pri < 51)
                 {
-                    if (pri < 51)
-                    {
-                        op = i;
-                        pri = 51;
-                    }
+                    op = i;
+                    pri = 51;
                 }
-                else if (tokens[i].type == AND)
+            }
+            else if (tokens[i].type == AND)
+            {
+                if (pri < 50)
                 {
-                    if (pri < 50)
-                    {
-                        op = i;
-                        pri = 50;
-                    }
+                    op = i;
+                    pri = 50;
                 }
-                else if (tokens[i].type == EQ || tokens[i].type == NOTEQ)
+            }
+            else if (tokens[i].type == EQ || tokens[i].type == NOTEQ)
+            {
+                if (pri < 49)
                 {
-                    if (pri < 49)
-                    {
-                        op = i;
-                        pri = 49;
-                    }
+                    op = i;
+                    pri = 49;
                 }
-                else if (tokens[i].type == '+' || tokens[i].type == '-')
+            }
+            else if (tokens[i].type == '+' || tokens[i].type == '-')
+            {
+                if (pri < 48)
                 {
-                    if (pri < 48)
-                    {
-                        op = i;
-                        pri = 48;
-                    }
+                    op = i;
+                    pri = 48;
                 }
-                else if (tokens[i].type == '*' || tokens[i].type == '/')
+            }
+            else if (tokens[i].type == '*' || tokens[i].type == '/')
+            {
+                if (pri < 46)
                 {
-                    if (pri < 46)
-                    {
-                        op = i;
-                        pri = 46;
-                    }
+                    op = i;
+                    pri = 46;
                 }
             }
         }
-
-        // Add debugging output to trace operator determination
-        if (op == -1)
-        {
-            printf("No dominant operator found between positions %d and %d\n", p, q);
-        }
-
-        return op;
     }
+
+    // Add debugging output to trace operator determination
+    if (op == -1)
+    {
+        printf("No dominant operator found between positions %d and %d\n", p, q);
+    }
+
+    return op;
+}
 
 static bool make_token(char *e)
 {
@@ -438,59 +443,59 @@ uint32_t eval(int p, int q)
             sscanf(tokens[q].str, "%d", &result);
             return !result;
         }
-        else if (tokens[p].type == REGISTER)
-        {
-            if (!strcmp(tokens[p].str, "$eax"))
-            {
-                result = cpu.eax;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ecx"))
-            {
-                result = cpu.ecx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$edx"))
-            {
-                result = cpu.edx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ebx"))
-            {
-                result = cpu.ebx;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$esp"))
-            {
-                result = cpu.esp;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$ebp"))
-            {
-                result = cpu.ebp;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$esi"))
-            {
-                result = cpu.esi;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$edi"))
-            {
-                result = cpu.edi;
-                return result;
-            }
-            else if (!strcmp(tokens[p].str, "$eip"))
-            {
-                result = cpu.eip;
-                return result;
-            }
-            else
-            {
-                assert(0);
-                return 0;
-            }
-        }
+        // else if (tokens[p].type == REGISTER)
+        // {
+        //     if (!strcmp(tokens[p].str, "$eax"))
+        //     {
+        //         result = cpu.eax;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$ecx"))
+        //     {
+        //         result = cpu.ecx;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$edx"))
+        //     {
+        //         result = cpu.edx;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$ebx"))
+        //     {
+        //         result = cpu.ebx;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$esp"))
+        //     {
+        //         result = cpu.esp;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$ebp"))
+        //     {
+        //         result = cpu.ebp;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$esi"))
+        //     {
+        //         result = cpu.esi;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$edi"))
+        //     {
+        //         result = cpu.edi;
+        //         return result;
+        //     }
+        //     else if (!strcmp(tokens[p].str, "$eip"))
+        //     {
+        //         result = cpu.eip;
+        //         return result;
+        //     }
+        //     else
+        //     {
+        //         assert(0);
+        //         return 0;
+        //     }
+        // }
 
         val1 = eval(p, op - 1);
         val2 = eval(op + 1, q);

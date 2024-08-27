@@ -162,7 +162,7 @@ static int cmd_w(char *args){
     wp->result = expr(expression, false);
     printf("result: %d\n", wp->result);
     strcpy(wp->expr, expression);
-    printf("Wathc point has set");
+    printf("Watch point has set");
     return 0;
 }
 static struct

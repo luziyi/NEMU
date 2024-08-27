@@ -313,6 +313,7 @@ uint32_t eval(int p, int q)
         }
         else if (tokens[p].type == HEX)
         {
+            printf("tokens[p].str = %s\n", tokens[p].str);
             int i = 2;
             while (tokens[p].str[i] != 0)
             {

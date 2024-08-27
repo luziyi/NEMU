@@ -110,7 +110,7 @@ bool check_wp(const swaddr_t eip)
         if (expr_temp != temp->result)
         {
             check = true;
-            Log("Hint watchpoint %d at address 0x%08x\n", temp->NO, eip);
+            printf("Hint watchpoint %d at address 0x%08x\n", temp->NO, eip);
             temp = temp->next;
             continue;
         }

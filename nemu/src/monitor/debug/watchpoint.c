@@ -97,3 +97,28 @@ WP *delete_wp(int p, bool *key)
     }
     return temp;
 }
+
+bool check_wp(const swaddr_t eip)
+{
+    bool check = false;
+    bool *success = false;
+    WP *temp = head;
+    int expr_temp;
+    while (temp != NULL)
+    {
+        expr_temp = expr(temp->expr, success);
+        if (expr_temp != temp->result)
+        {
+            check = true;
+            printf("Hint watchpoint %d at address 0x%08x\n", temp->NO, eip);
+            temp = temp->next;
+            continue;
+        }
+        printf("Watchpoint %d: %s\n", temp->NO, temp->expr);
+        printf("Old value = %d\n", temp->result);
+        printf("New value = %d\n", expr_temp);
+        temp->result = expr_temp;
+        temp = temp->next;
+    }
+    return check;
+}

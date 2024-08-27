@@ -153,6 +153,11 @@ static int cmd_d(char *args)
     }
     return 0;
 }
+
+static int cmd_w(){
+    printf("set");
+    return 0;
+}
 static struct
 {
     char *name;
@@ -167,6 +172,7 @@ static struct
     {"x", "Scan the memory", cmd_x},
     {"p", "Calculate the expression", cmd_p},
     {"d", "Delete the watchpoint", cmd_d},
+    {"w", "Set the watchpoint", cmd_w},
     /* TODO: Add more commands */
 
 };

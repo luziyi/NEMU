@@ -155,11 +155,13 @@ static int cmd_d(char *args)
 }
 
 static int cmd_w(char *args){
-    char expr[32];
-    sscanf(args, "%s", expr);
-    printf("args read: %s\n",expr);
+    char expression[32];
+    sscanf(args, "%s", expression);
+    printf("args read: %s\n",expression);
     WP *wp = new_wp();
-    strcpy(wp->expr, expr);
+    bool *success = false;
+    wp->result = expr(expression, success);
+    strcpy(wp->expr, expression);
     printf("Wathc point has set");
     return 0;
 }

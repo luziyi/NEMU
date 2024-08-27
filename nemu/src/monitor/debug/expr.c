@@ -321,6 +321,7 @@ uint32_t eval(int p, int q)
                 result += tokens[p].str[i] < 58 ? tokens[p].str[i] - '0' : tokens[p].str[i] - 'a' + 10;
                 i++;
             }
+            return result;
         }
         else if (tokens[p].type == REGISTER)
         {

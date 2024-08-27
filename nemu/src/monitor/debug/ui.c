@@ -78,6 +78,11 @@ static int cmd_info()
         printf("eip: 0x%x\n", cpu.eip);
         return 0;
     }
+    if (strcmp(arg, "w") == 0)
+    {
+        print_wp();
+        return 0;
+    }
     printf("Unknown command '%s'\n", arg);
     return 0;
 }
@@ -125,6 +130,26 @@ static int cmd_p(char *args)
     if (!success)
     {
         printf("%d\n", i);
+    }
+    return 0;
+}
+
+static int cmd_d(char *args)
+{
+    int p;
+    bool key = true;
+    sscanf(args, "%d", &p);
+    WP *q = delete_wp(p, &key);
+    if (key)
+    {
+        printf("Delete watchpoint %d: %s\n", q->NO, q->expr);
+        free_wp(q);
+        return 0;
+    }
+    else
+    {
+        printf("No found watchpoint %d\n", p);
+        return 0;
     }
     return 0;
 }

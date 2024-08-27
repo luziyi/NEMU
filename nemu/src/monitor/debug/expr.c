@@ -99,77 +99,77 @@ bool check_parentheses(int p, int q) {
 }
 
 
-int dominant_operator(int p, int q)
-{
-    int step = 0;
-    int i;
-    int op = -1;
-    int pri = 0;
-
-    for (i = p; i <= q; i++)
+    int dominant_operator(int p, int q)
     {
-        if (tokens[i].type == '(')
+        int step = 0;
+        int i;
+        int op = -1;
+        int pri = 0;
+
+        for (i = p; i <= q; i++)
         {
-            step++;
-        }
-        if (tokens[i].type == ')')
-        {
-            step--;
+            if (tokens[i].type == '(')
+            {
+                step++;
+            }
+            if (tokens[i].type == ')')
+            {
+                step--;
+            }
+
+            if (step == 0)
+            {
+                if (tokens[i].type == OR)
+                {
+                    if (pri < 51)
+                    {
+                        op = i;
+                        pri = 51;
+                    }
+                }
+                else if (tokens[i].type == AND)
+                {
+                    if (pri < 50)
+                    {
+                        op = i;
+                        pri = 50;
+                    }
+                }
+                else if (tokens[i].type == EQ || tokens[i].type == NOTEQ)
+                {
+                    if (pri < 49)
+                    {
+                        op = i;
+                        pri = 49;
+                    }
+                }
+                else if (tokens[i].type == '+' || tokens[i].type == '-')
+                {
+                    if (pri < 48)
+                    {
+                        op = i;
+                        pri = 48;
+                    }
+                }
+                else if (tokens[i].type == '*' || tokens[i].type == '/')
+                {
+                    if (pri < 46)
+                    {
+                        op = i;
+                        pri = 46;
+                    }
+                }
+            }
         }
 
-        if (step == 0)
+        // Add debugging output to trace operator determination
+        if (op == -1)
         {
-            if (tokens[i].type == OR)
-            {
-                if (pri < 51)
-                {
-                    op = i;
-                    pri = 51;
-                }
-            }
-            else if (tokens[i].type == AND)
-            {
-                if (pri < 50)
-                {
-                    op = i;
-                    pri = 50;
-                }
-            }
-            else if (tokens[i].type == EQ || tokens[i].type == NOTEQ)
-            {
-                if (pri < 49)
-                {
-                    op = i;
-                    pri = 49;
-                }
-            }
-            else if (tokens[i].type == '+' || tokens[i].type == '-')
-            {
-                if (pri < 48)
-                {
-                    op = i;
-                    pri = 48;
-                }
-            }
-            else if (tokens[i].type == '*' || tokens[i].type == '/')
-            {
-                if (pri < 46)
-                {
-                    op = i;
-                    pri = 46;
-                }
-            }
+            printf("No dominant operator found between positions %d and %d\n", p, q);
         }
+
+        return op;
     }
-
-    // Add debugging output to trace operator determination
-    if (op == -1)
-    {
-        printf("No dominant operator found between positions %d and %d\n", p, q);
-    }
-
-    return op;
-}
 
 static bool make_token(char *e)
 {
@@ -291,7 +291,7 @@ static bool make_token(char *e)
 
 uint32_t eval(int p, int q)
 {
-    // printf("p = %d, q = %d\n", p, q);
+    printf("p = %d, q = %d\n", p, q);
     int result = 0;
     int op;
     int val1, val2;

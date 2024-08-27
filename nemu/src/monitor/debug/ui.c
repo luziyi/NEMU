@@ -154,8 +154,13 @@ static int cmd_d(char *args)
     return 0;
 }
 
-static int cmd_w(){
-    printf("set");
+static int cmd_w(char *args){
+    char expr[32];
+    sscanf(args, "%s", expr);
+    printf("args read: %s\n",expr);
+    WP *wp = new_wp();
+    strcpy(wp->expr, expr);
+    printf("Wathc point has set");
     return 0;
 }
 static struct

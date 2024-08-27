@@ -111,6 +111,8 @@ bool check_wp(const swaddr_t eip)
         {
             check = true;
             printf("Hint watchpoint %d at address 0x%08x\n", temp->NO, eip);
+            printf("Old value = %d\n", temp->result);
+            printf("New value = %d\n", expr_temp);
             temp = temp->next;
             continue;
         }

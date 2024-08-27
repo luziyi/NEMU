@@ -114,9 +114,9 @@ bool check_wp(const swaddr_t eip)
             temp = temp->next;
             continue;
         }
-        printf("Watchpoint %d: %s\n", temp->NO, temp->expr);
-        printf("Old value = %d\n", temp->result);
-        printf("New value = %d\n", expr_temp);
+        // printf("Watchpoint %d: %s\n", temp->NO, temp->expr);
+        // printf("Old value = %d\n", temp->result);
+        // printf("New value = %d\n", expr_temp);
         temp->result = expr_temp;
         temp = temp->next;
     }

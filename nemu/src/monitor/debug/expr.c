@@ -296,7 +296,7 @@ static bool make_token(char *e)
 
 uint32_t eval(int p, int q)
 {
-    printf("p = %d, q = %d\n", p, q);
+    // printf("p = %d, q = %d\n", p, q);
     int result = 0;
     int op;
     int val1, val2;
@@ -313,7 +313,7 @@ uint32_t eval(int p, int q)
         }
         else if (tokens[p].type == HEX)
         {
-            printf("tokens[p].str = %s\n", tokens[p].str);
+            // printf("tokens[p].str = %s\n", tokens[p].str);
             int i = 2;
             while (tokens[p].str[i] != 0)
             {
@@ -379,7 +379,7 @@ uint32_t eval(int p, int q)
     {
         // printf("\tp = %d, q = %d\n", p, q);
         op = dominant_operator(p, q);
-        printf("op = %d\n", op);
+        // printf("op = %d\n", op);
         if (op == -2)
         {
             assert(0);
@@ -445,59 +445,6 @@ uint32_t eval(int p, int q)
             sscanf(tokens[q].str, "%d", &result);
             return !result;
         }
-        // else if (tokens[p].type == REGISTER)
-        // {
-        //     if (!strcmp(tokens[p].str, "$eax"))
-        //     {
-        //         result = cpu.eax;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$ecx"))
-        //     {
-        //         result = cpu.ecx;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$edx"))
-        //     {
-        //         result = cpu.edx;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$ebx"))
-        //     {
-        //         result = cpu.ebx;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$esp"))
-        //     {
-        //         result = cpu.esp;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$ebp"))
-        //     {
-        //         result = cpu.ebp;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$esi"))
-        //     {
-        //         result = cpu.esi;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$edi"))
-        //     {
-        //         result = cpu.edi;
-        //         return result;
-        //     }
-        //     else if (!strcmp(tokens[p].str, "$eip"))
-        //     {
-        //         result = cpu.eip;
-        //         return result;
-        //     }
-        //     else
-        //     {
-        //         assert(0);
-        //         return 0;
-        //     }
-        // }
 
         val1 = eval(p, op - 1);
         val2 = eval(op + 1, q);

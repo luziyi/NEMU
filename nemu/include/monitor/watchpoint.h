@@ -11,4 +11,10 @@ typedef struct watchpoint {
 	char expr[32];
 } WP;
 
+void init_wp_pool();
+WP* new_wp();
+void free_wp(WP *wp);
+WP *delete_wp(int p, bool *key);
+void print_wp();
+
 #endif

@@ -165,7 +165,8 @@ static struct
     {"si", "One Step", cmd_si},
     {"info", "Print the information of program", cmd_info},
     {"x", "Scan the memory", cmd_x},
-    {"p", "Calculate the expression", cmd_p}
+    {"p", "Calculate the expression", cmd_p},
+    {"d", "Delete the watchpoint", cmd_d},
     /* TODO: Add more commands */
 
 };

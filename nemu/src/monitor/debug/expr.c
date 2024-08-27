@@ -37,7 +37,7 @@ static struct rule
     {"\\*", '*'},
     {"\\/", '/'},
 
-    {"\\$[a-z][A-Z]+", REGISTER},
+    {"\\$[a-z]+", REGISTER},
     {"0[xX][0-9a-fA-F]+", HEX},
     {"[0-9]+", NUM},
 

@@ -99,8 +99,12 @@ static int cmd_x()
         printf("Invaild args\nUsage: x [N] [EXPR]\n");
         return 0;
     }
+
+    int i;
+    i=expr(args[1],false);
+    address = (uint32_t)i;
+
     sscanf(args[0], "%d", &step);
-    sscanf(args[1], "%x", &address);
 
     int j = 0;
     for (int i = 0; i < step; i++)

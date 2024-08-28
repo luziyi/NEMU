@@ -148,7 +148,7 @@ static int cmd_d(char *args)
     }
     else
     {
-        printf("No found watchpoint %d\n", p);
+        printf("Watchpoitn %d doesn't exist\n", p);
         return 0;
     }
     return 0;

@@ -21,7 +21,7 @@ make_helper(concat(call_rm_, SUFFIX)) {
     printf("Pushed return address 0x%x to stack\n", cpu.eip + len + 1);
     cpu.eip = (DATA_TYPE_S)op_src->val; 
     printf("New eip = 0x%x\n", cpu.eip);
-    return 0; 
+    return len + 1; 
 }
 
 #include "cpu/exec/template-end.h"

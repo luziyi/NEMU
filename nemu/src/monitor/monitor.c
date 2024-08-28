@@ -75,6 +75,7 @@ static void load_entry() {
 }
 
 void restart() {
+	cpu.eflags.val = 0x00000002;
 	/* Perform some initialization to restart a program */
 #ifdef USE_RAMDISK
 	/* Read the file with name `argv[1]' into ramdisk. */

@@ -28,5 +28,7 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.4 10 \
     && update-alternatives --config gcc \
     && update-alternatives --config g++
 
+RUN apt-get update && apt-get install bsdmainutils
+
 # 清理缓存
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

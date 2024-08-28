@@ -152,7 +152,7 @@ static int cmd_d(char *args)
     }
     else
     {
-        printf("watchpoint #%d doesn't exist\n", p);
+        printf("Watchpoint #%d does not exist\n", p);
         return 0;
     }
     return 0;

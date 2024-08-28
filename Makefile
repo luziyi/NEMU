@@ -73,6 +73,7 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 
 submit: clean
 	cd .. && zip -r $(STU_ID).zip $(shell pwd | grep -o '[^/]*$$')
+	mv ../$(STU_ID).zip .
 
 count:
 	find nemu -name '*.c' -o -name '*.h' | xargs awk 'NF' | wc -l

@@ -68,9 +68,10 @@ static int cmd_si()
 static int cmd_info()
 {
     char *arg = strtok(NULL, " ");
+    int i;
     if (strcmp(arg, "r") == 0)
     {
-        for (int i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++)
         {
             printf("%s\t", regsl[i]);
             printf("0x%08x \t %d\n", cpu.gpr[i]._32, cpu.gpr[i]._32);
@@ -100,14 +101,15 @@ static int cmd_x()
         return 0;
     }
 
-    int i;
-    i=expr(args[1],false);
-    address = (uint32_t)i;
+    int k;
+    k = expr(args[1], false);
+    address = (uint32_t)k;
 
     sscanf(args[0], "%d", &step);
 
     int j = 0;
-    for (int i = 0; i < step; i++)
+    int i = 0;
+    for (i = 0; i < step; i++)
     {
         if (j % 4 == 0)
         {
@@ -158,7 +160,8 @@ static int cmd_d(char *args)
     return 0;
 }
 
-static int cmd_w(char *args){
+static int cmd_w(char *args)
+{
     WP *wp = new_wp();
     wp->result = expr(args, false);
     printf("Set watchpoint #%d\n", wp->NO);

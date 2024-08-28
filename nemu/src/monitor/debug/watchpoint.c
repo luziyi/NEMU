@@ -80,7 +80,7 @@ void print_wp()
     }
     while (temp != NULL)
     {
-        printf("%d \t %s \t 0x%x \n", temp->NO, temp->expr, temp->result);
+        printf("%d \t %s \t 0x08%x \n", temp->NO, temp->expr, temp->result);
         temp = temp->next;
     }
 }

@@ -129,7 +129,7 @@ static int cmd_p(char *args)
     i = expr(args, success);
     if (!success)
     {
-        printf("%d\n", i);
+        printf("0x%X(%d)\n", i, i);
     }
     return 0;
 }
@@ -148,7 +148,7 @@ static int cmd_d(char *args)
     }
     else
     {
-        printf("Watchpoitn %d doesn't exist\n", p);
+        printf("watchpoint #%d doesn't exist\n", p);
         return 0;
     }
     return 0;
@@ -159,7 +159,7 @@ static int cmd_w(char *args){
     sscanf(args, "%s", expression);
     WP *wp = new_wp();
     wp->result = expr(expression, false);
-    printf("Set watchpoint #%d", wp->NO);
+    printf("Set watchpoint #%d\n", wp->NO);
     strcpy(wp->expr, expression);
     return 0;
 }

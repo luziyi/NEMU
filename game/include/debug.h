@@ -10,7 +10,7 @@
 	printf("\33[1;35m[%s,%d,%s]" GAME_LABEL format "\33[0m\n", \
 			__FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
-#define panic(format, ...) \
+#define panic(format, ...) \	
 do { \
 	cli(); \
 	Log("\33[1;31msystem panic: " format, ## __VA_ARGS__); \

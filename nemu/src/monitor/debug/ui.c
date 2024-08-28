@@ -157,12 +157,10 @@ static int cmd_d(char *args)
 static int cmd_w(char *args){
     char expression[32];
     sscanf(args, "%s", expression);
-    printf("args read: %s\n",expression);
     WP *wp = new_wp();
     wp->result = expr(expression, false);
-    printf("result: %d\n", wp->result);
+    printf("Set watchpoint #%d", wp->NO);
     strcpy(wp->expr, expression);
-    printf("Watch point has set");
     return 0;
 }
 static struct

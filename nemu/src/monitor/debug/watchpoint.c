@@ -72,7 +72,7 @@ void free_wp(WP *wp)
 
 void print_wp()
 {
-    printf("NO\tAdress\t\tEnable\n");
+    printf("NO\tAdress\t\t\tEnable\n");
     WP *temp = head;
     if (temp == NULL)
     {

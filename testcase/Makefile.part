@@ -6,8 +6,8 @@ $(eval $(call make_common_rules,testcase,$(testcase_CFLAGS_EXTRA)))
 # redefine testcase_BIN
 testcase_BIN := $(testcase_COBJS:.o=)
 testcase_START_OBJ := $(testcase_OBJ_DIR)/start.o
-testcase_LDFLAGS := -m elf_i386 -T testcase/user.ld
-
+#testcase_LDFLAGS := -m elf_i386 -T testcase/user.ld
+testcase_LDFLAGS := -m elf_i386 -e main -Ttext-segment=0x00800000
 
 $(testcase_BIN): % : $(testcase_START_OBJ) %.o $(FLOAT) $(LIBC)
 	$(call make_command, $(LD), $(testcase_LDFLAGS), ld $@, $^)
@@ -20,7 +20,6 @@ $(testcase_OBJ_DIR)/mov: % : %.o
 # We use -O2 to compile these two source files to eliminate floating
 # point instructions. gcc 6 will generate floating point instructions
 # for passing floating point arguments with -O0.
-
 $(testcase_OBJ_DIR)/integral.o: testcase/src/integral.c
 	$(call make_command, $(CC), $(testcase_CFLAGS) -O2, cc $@, $<)
 

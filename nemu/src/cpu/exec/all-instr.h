@@ -24,6 +24,7 @@
 #include "control/jmp.h"
 #include "control/call.h"
 #include "control/jcc.h"
+#include "control/ret.h"
 
 #include "logic/and.h"
 #include "logic/or.h"
@@ -34,11 +35,13 @@
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/test.h"
+#include "logic/setcc.h"
 
 #include "string/rep.h"
 #include "string/scas.h"
 #include "string/stos.h"
 #include "string/movs.h"
+#include "string/lods.h"
 
 #include "misc/misc.h"
 

@@ -6,14 +6,14 @@ $(eval $(call make_common_rules,testcase,$(testcase_CFLAGS_EXTRA)))
 # redefine testcase_BIN
 testcase_BIN := $(testcase_COBJS:.o=)
 testcase_START_OBJ := $(testcase_OBJ_DIR)/start.o
-#testcase_LDFLAGS := -m elf_i386 -T testcase/user.ld
+testcase_LDFLAGS := -m elf_i386 -T testcase/user.ld
 
 
 $(testcase_BIN): % : $(testcase_START_OBJ) %.o $(FLOAT) $(LIBC)
 	$(call make_command, $(LD), $(testcase_LDFLAGS), ld $@, $^)
 	@objdump -d $@ > $@.txt
 
-$(testcase_OBJ_DIR)/*: % : %.o
+$(testcase_OBJ_DIR)/mov: % : %.o
 	$(call make_command, $(LD), -m elf_i386 -Ttext=0x100000, ld $@, $^)
 	@objdump -d $@ > $@.txt
 

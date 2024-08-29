@@ -12,7 +12,8 @@
 #include "push-template.h"
 #undef DATA_BYTE
 
+/* for instruction encoding overloading */
+
 make_helper_v(push_r)
-//make_helper(push_i_b);
-make_helper_v(push_i)
 make_helper_v(push_rm)
+

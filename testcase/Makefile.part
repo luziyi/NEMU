@@ -13,7 +13,7 @@ $(testcase_BIN): % : $(testcase_START_OBJ) %.o $(FLOAT) $(LIBC)
 	$(call make_command, $(LD), $(testcase_LDFLAGS), ld $@, $^)
 	@objdump -d $@ > $@.txt
 
-$(testcase_OBJ_DIR)/mov: % : %.o
+$(testcase_OBJ_DIR)/*: % : %.o
 	$(call make_command, $(LD), -m elf_i386 -Ttext=0x100000, ld $@, $^)
 	@objdump -d $@ > $@.txt
 

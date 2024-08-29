@@ -20,6 +20,7 @@ $(testcase_OBJ_DIR)/mov: % : %.o
 # We use -O2 to compile these two source files to eliminate floating
 # point instructions. gcc 6 will generate floating point instructions
 # for passing floating point arguments with -O0.
+
 $(testcase_OBJ_DIR)/integral.o: testcase/src/integral.c
 	$(call make_command, $(CC), $(testcase_CFLAGS) -O2, cc $@, $<)
 

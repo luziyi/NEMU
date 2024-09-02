@@ -72,12 +72,13 @@ void free_wp(WP *wp)
 
 void print_wp()
 {
-    printf("NO\tAdress\tEnable\n");
     WP *temp = head;
     if (temp == NULL)
     {
         printf("No watchpoints\n");
+        return;
     }
+    printf("NO\tAdress\tEnable\n");
     while (temp != NULL)
     {
         printf("%d \t %s \t 0x%08x \n", temp->NO, temp->expr, temp->result);

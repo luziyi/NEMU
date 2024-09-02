@@ -54,6 +54,7 @@ static int cmd_si()
         return 0;
     }
     sscanf(steps, "%d", &step);
+    if(step>=10) step=10;
     if (step <= 0)
     {
         printf("Invalid steps\n");
@@ -65,6 +66,7 @@ static int cmd_si()
     }
     return 0;
 }
+
 static int cmd_info()
 {
     char *arg = strtok(NULL, " ");

@@ -78,10 +78,10 @@ void print_wp()
         printf("No watchpoints\n");
         return;
     }
-    printf("NO\tAdress\tEnable\n");
+    printf("NO Adress Enable\n");
     while (temp != NULL)
     {
-        printf("%d \t %s \t 0x%08x \n", temp->NO, temp->expr, temp->result);
+        printf("%d %s 0x%08x \n", temp->NO, temp->expr, temp->result);
         temp = temp->next;
     }
 }

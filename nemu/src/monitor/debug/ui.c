@@ -73,7 +73,7 @@ static int cmd_info()
     {
         for (i = 0; i < 8; i++)
         {
-            printf("%s", regsl[i]);
+            printf("%s ", regsl[i]);
             printf("0x%08x %d\n", cpu.gpr[i]._32, cpu.gpr[i]._32);
         }
         printf("eip 0x%x %d\n", cpu.eip, cpu.eip);

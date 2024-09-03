@@ -115,7 +115,7 @@ static int cmd_x()
     {
         if (j % 4 == 0)
         {
-            printf("0x%x: ", address);
+            printf("0x%08x: ", address);
         }
         printf("0x%08x ", swaddr_read(address, 4));
 

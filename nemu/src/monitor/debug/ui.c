@@ -54,7 +54,8 @@ static int cmd_si()
         return 0;
     }
     sscanf(steps, "%d", &step);
-    if(step>=10) step=10;
+    if (step >= 10)
+        step = 10;
     if (step <= 0)
     {
         printf("Invalid steps\n");
@@ -67,26 +68,27 @@ static int cmd_si()
     return 0;
 }
 
-static int cmd_info()
+static int cmd_info(char *args)
 {
     char *arg = strtok(NULL, " ");
-    int i;
-    if (strcmp(arg, "r") == 0)
+
+    if (arg != NULL)
     {
-        for (i = 0; i < 8; i++)
+        if (strcmp(arg, "r") == 0)
         {
-            printf("%s ", regsl[i]);
-            printf("0x%08x %d\n", cpu.gpr[i]._32, cpu.gpr[i]._32);
+            int i;
+            for (i = 0; i < 8; i++)
+            {
+                printf("%s\t\t0x%08x\t\t%d\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
+            }
+
+            printf("%s\t\t0x%08x\t\t%d\n", "eip", cpu.eip, cpu.eip);
         }
-        printf("eip 0x%08x %d\n", cpu.eip, cpu.eip);
-        return 0;
+        else if (strcmp(arg, "w") == 0)
+        {
+            print_wp();
+        }
     }
-    if (strcmp(arg, "w") == 0)
-    {
-        print_wp();
-        return 0;
-    }
-    printf("Unknown command '%s'\n", arg);
     return 0;
 }
 

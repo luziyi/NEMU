@@ -17,3 +17,4 @@ $(FLOAT_O): lib-common/FLOAT/FLOAT.c
 $(FLOAT_VFPRINTF_O): lib-common/FLOAT/FLOAT_vfprintf.c
 	mkdir -p $(@D)
 	gcc -m32 -fno-builtin -I$(LIB_COMMON_DIR) -O2 -c -o $@ $<
+

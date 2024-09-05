@@ -376,7 +376,6 @@ uint32_t eval(int p, int q)
             bool success;
             uint32_t val;
             val = getValue(tokens[p].str,&success);
-            if(!success){return 0;}
             return val;
         }
         else

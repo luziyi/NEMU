@@ -21,7 +21,7 @@ enum
     ID=10
 };
 
-uint32_t getValue(char* str,bool* success);
+uint32_t getValue(char* str);
 
 
 static struct rule
@@ -373,9 +373,8 @@ uint32_t eval(int p, int q)
             }
         }
         else if(tokens[p].type==ID){
-            bool success;
             uint32_t val;
-            val = getValue(tokens[p].str,&success);
+            val = getValue(tokens[p].str);
             return val;
         }
         else

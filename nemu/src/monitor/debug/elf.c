@@ -97,7 +97,7 @@ uint32_t look_up_symtab(char *sym, bool *success) {
 }
 
 
-uint32_t getValue(char* str,bool* success){
+uint32_t getValue(char* str){
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++){
         //STT_OBJECT代表符号的类型是一个数据对象，例如变量、数组、指针（符号的类型在低四位）
@@ -108,7 +108,7 @@ uint32_t getValue(char* str,bool* success){
 			} 
 		}
 	}
-	*success = false;
+	assert(0);
 	return 0;
 }
 

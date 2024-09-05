@@ -11,6 +11,7 @@
 
 #include "debug.h"
 #include "macro.h"
+#include "memory.h"
 
 #include <stdint.h>
 #include <assert.h>

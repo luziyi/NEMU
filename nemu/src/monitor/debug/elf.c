@@ -96,18 +96,32 @@ uint32_t look_up_symtab(char *sym, bool *success) {
 	return 0;
 }
 
-const char* find_fun_name(uint32_t eip) {
-	static const char not_found[] = "???";
 
+uint32_t getValue(char* str,bool* success){
 	int i;
-	for(i = 0; i < nr_symtab_entry; i ++) {
-		if(ELF32_ST_TYPE(symtab[i].st_info) == STT_FUNC && 
-				eip >= symtab[i].st_value && eip < symtab[i].st_value + symtab[i].st_size) {
-			return strtab + symtab[i].st_name;
+	for (i = 0; i < nr_symtab_entry; i++){
+        //STT_OBJECT代表符号的类型是一个数据对象，例如变量、数组、指针（符号的类型在低四位）
+		if ((symtab[i].st_info & 0xf) == STT_OBJECT || (symtab[i].st_info & 0xf) == STT_FUNC){ 
+            //字符串表+符号偏移量 = 符号所在地址STT_FUNC代表符号的类型是一个函数（符号的类型在低四位）
+			if (strcmp(strtab + symtab[i].st_name, str) == 0){ 
+				return symtab[i].st_value;
+			} 
 		}
 	}
+	*success = false;
+	return 0;
+}
 
-	return not_found;
+char* getFuncName(swaddr_t eip) {
+	int i;
+	for(i = 0; i < nr_symtab_entry; i ++) {
+		if((symtab[i].st_info & 0xf) == STT_FUNC ){
+				if(eip >= symtab[i].st_value && eip <= symtab[i].st_value + symtab[i].st_size)  {
+				return strtab + symtab[i].st_name;
+		}
+		}
+	}
+	return 0;
 }
 
 

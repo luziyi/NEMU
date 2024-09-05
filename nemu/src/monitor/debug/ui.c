@@ -132,6 +132,31 @@ static int cmd_x()
     return 0;
 }
 
+static int cmd_bt(char *args) {
+	const char* getFuncName(uint32_t eip);
+	struct {
+		swaddr_t prev_ebp;
+		swaddr_t ret_addr;
+		uint32_t args[4];
+	} sf;
+
+	uint32_t ebp = cpu.ebp;
+	uint32_t eip = cpu.eip;
+	int i = 0;
+	while(ebp != 0) {
+		sf.args[0] = swaddr_read(ebp + 8, 4);
+		sf.args[1] = swaddr_read(ebp + 12, 4);
+		sf.args[2] = swaddr_read(ebp + 16, 4);
+		sf.args[3] = swaddr_read(ebp + 20, 4);
+
+		printf("#%d 0x%08x in %s (0x%08x 0x%08x 0x%08x 0x%08x)\n", i, eip, getFuncName(eip), sf.args[0], sf.args[1], sf.args[2], sf.args[3]);
+		i ++;
+		eip = swaddr_read(ebp + 4, 4);
+		ebp = swaddr_read(ebp, 4);
+	}
+	return 0;
+}
+
 static int cmd_p(char *args)
 {
     bool *success = false;
@@ -187,6 +212,7 @@ static struct
     {"p", "Calculate the expression", cmd_p},
     {"d", "Delete the watchpoint", cmd_d},
     {"w", "Set the watchpoint", cmd_w},
+    {"bt", "Display backtrace", cmd_bt}
     /* TODO: Add more commands */
 
 };

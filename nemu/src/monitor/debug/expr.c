@@ -17,8 +17,12 @@ enum
     OR = 6,
     AND = 7,
     POINT = 8,
-    NEG = 9
+    NEG = 9,
+    ID=10
 };
+
+uint32_t getValue(char* str,bool* success);
+
 
 static struct rule
 {
@@ -48,7 +52,9 @@ static struct rule
     {"!", '!'},
 
     {"\\(", '('},
-    {"\\)", ')'}
+    {"\\)", ')'},
+
+    {"[a-zA-Z_]{1,31}", ID},
 
 };
 
@@ -271,6 +277,11 @@ static bool make_token(char *e)
                     tokens[nr_token].type = ')';
                     nr_token++;
                     break;
+                case 10:
+                    tokens[nr_token].type= ID;
+                    strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+                    nr_token++;
+                    break;
                 default:
                     assert(0);
                 }
@@ -360,6 +371,13 @@ uint32_t eval(int p, int q)
             {
                 return 0;
             }
+        }
+        else if(tokens[p].type==ID){
+            bool success;
+            uint32_t val;
+            val = getValue(tokens[p].str,&success);
+            if(!success){return 0;}
+            return val;
         }
         else
         {
